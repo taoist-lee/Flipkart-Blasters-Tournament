@@ -1,6 +1,11 @@
 package com.leedroid.blasterstournament.domain
 
-import com.leedroid.blasterstournament.domain.model.*
+import com.leedroid.blasterstournament.domain.model.Match
+import com.leedroid.blasterstournament.domain.model.Player
+import com.leedroid.blasterstournament.domain.model.PlayerMatchRow
+import com.leedroid.blasterstournament.domain.model.PointsSortOrder
+import com.leedroid.blasterstournament.domain.model.Result
+import com.leedroid.blasterstournament.domain.model.Standing
 
 object StandingsCalculator {
     data class Aggregate(
@@ -26,9 +31,11 @@ object StandingsCalculator {
                 m.player1Score > m.player2Score -> {
                     p1.points += 3; p1.wins++; p2.losses++
                 }
+
                 m.player2Score > m.player1Score -> {
                     p2.points += 3; p2.wins++; p1.losses++
                 }
+
                 else -> {
                     p1.points += 1; p2.points += 1; p1.draws++; p2.draws++
                 }
@@ -51,20 +58,18 @@ object StandingsCalculator {
     }
 
     fun sortStandings(list: List<Standing>, order: PointsSortOrder): List<Standing> =
-        list.sortedWith(
-            compareBy<Standing> {
-                when (order) {
-                    PointsSortOrder.ASC -> it.points
-                    PointsSortOrder.DESC -> -it.points
-                }
-            }.thenByDescending { it.totalScore }
-                .thenBy { it.name }
-        )
+        list.sortedWith(compareBy<Standing> {
+            when (order) {
+                PointsSortOrder.ASC -> it.points
+                PointsSortOrder.DESC -> -it.points
+            }
+        }.thenByDescending { it.totalScore }.thenBy { it.name })
 
-    fun buildPlayerMatchRows(playerId: Int, player: Player, players: Map<Int, Player>, matches: List<Match>): List<PlayerMatchRow> {
+    fun buildPlayerMatchRows(
+        playerId: Int, players: Map<Int, Player>, matches: List<Match>
+    ): List<PlayerMatchRow> {
         return matches.filter { it.player1Id == playerId || it.player2Id == playerId }
-            .sortedByDescending { it.matchNumber }
-            .map { m ->
+            .sortedByDescending { it.matchNumber }.map { m ->
                 val isRight = m.player2Id == playerId
                 val leftPlayer = players[m.player1Id]
                 val rightPlayer = players[m.player2Id]

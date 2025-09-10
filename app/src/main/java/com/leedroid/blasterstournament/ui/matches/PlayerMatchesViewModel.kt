@@ -35,7 +35,8 @@ class PlayerMatchesViewModel @Inject constructor(
                 combine(repo.players, repo.matches) { players, matches ->
                     val player = players.firstOrNull { it.id == playerId }
                         ?: return@combine PlayerMatchesUiState.Error("Player not found")
-                    val rows = StandingsCalculator.buildPlayerMatchRows(playerId, player, players.associateBy { it.id }, matches)
+                    val rows = StandingsCalculator.buildPlayerMatchRows(playerId,
+                        players.associateBy { it.id }, matches)
                     PlayerMatchesUiState.Data(player, rows)
                 }.collect { _state.value = it }
             } catch (e: Exception) {
