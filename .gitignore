@@ -1,15 +1,46 @@
+# Gradle
+.gradle/
+**/build/
+
+# IDE / IntelliJ / Android Studio
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+
+# Local config / secrets
 local.properties
+*.keystore
+*.jks
+*.keystore.properties
+
+# Native / external build
+.cxx/
+.externalNativeBuild/
+
+# Generated (KSP / codegen / intermediate)
+**/kspCaches/
+**/generated/
+
+# Compose (optional metrics if enabled later)
+compose-metrics/
+compose-reports/
+
+# Outputs / artifacts
+*.apk
+*.aab
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Misc
+captures/
+*.orig
+*.rej
+
+# Keep Gradle wrapper scripts & jar (do NOT ignore):
+# gradlew
+# gradlew.bat
+# gradle/wrapper/gradle-wrapper.jar
